@@ -14,26 +14,21 @@ CORS(app)
 def chat():
     user_message = request.json.get("message")
     
-    # 1. Create a Thread (This tracks the specific conversation)
-    thread = client.beta.threads.create()
+    if not user_message:
+        return jsonify({"error": "No message provided"}), 400
 
-    # 2. Add the user's message to that Thread
-    client.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_message
-    )
-
-    # 3. Start a "Run" (This tells the Assistant to start thinking)
-    run = client.beta.threads.runs.create_and_poll(
-        thread_id=thread.id,
-        assistant_id=os.getenv("ASSISTANT_ID")
-    )
-
-    # 4. Get the result
-    if run.status == 'completed': 
-        messages = client.beta.threads.messages.list(thread_id=thread.id)
-        # The latest message is at index 0
-        return jsonify({"response": messages.data[0].content[0].text.value})
-    
-    return jsonify({"response": "I'm sorry, I'm having trouble connecting to the clinic's system."}), 500
+    try:
+        # The 2026 Responses API call
+        # Using gpt-5-mini for best speed/cost balance
+        response = client.responses.create(
+            model="gpt-5-mini",
+            prompt_id=os.getenv("PROMPT_ID"), 
+            input=user_message
+        )
+        
+        # In the new API, the text is stored in .output_text
+        return jsonify({"response": response.output_text})
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"response": "I'm having trouble connecting to the clinic. Please try again in a moment."}), 500
