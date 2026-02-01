@@ -101,7 +101,7 @@ def chat():
             prompt={
                 "id": CUBHOUSE_PROMPT_ID,
                 "variables": {
-                    "user_input": user_message  # MUST match {{user_input}} in your prompt
+                    "user_input": 'what times are you open'  # MUST match {{user_input}} in your prompt
                 }
             }
         )
@@ -129,3 +129,4 @@ def chat():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "5000"))
     app.run(host="0.0.0.0", port=port)
+ 
