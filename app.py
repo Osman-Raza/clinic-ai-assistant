@@ -97,11 +97,11 @@ def chat():
 
         # Call Responses API using your Prompt (with variables)
         resp = client.responses.create(
-            model="gpt-5-mini",
+            model="gpt-5-chat-latest",
             prompt={
                 "id": CUBHOUSE_PROMPT_ID,
                 "variables": {
-                    "user_input": 'what times are you open'  # MUST match {{user_input}} in your prompt
+                    "user_input": user_message  # MUST match {{user_input}} in your prompt
                 }
             }
         )
@@ -128,5 +128,5 @@ def chat():
 # -----------------------
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "5000"))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=5001)
  
