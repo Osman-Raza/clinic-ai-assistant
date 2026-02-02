@@ -97,7 +97,7 @@ def chat():
 
         # Call Responses API using your Prompt (with variables)
         resp = client.responses.create(
-            model="gpt-5-nano",
+            model="gpt-4.1-mini-2025-04-14",
             prompt={
                 "id": CUBHOUSE_PROMPT_ID,
                 "variables": {
